@@ -1,6 +1,9 @@
-FROM node:12.2.0-alpine
-WORKDIR app
-COPY . .
+FROM node:16-alpine
+WORKDIR /app
+COPY package.json .
 RUN npm install
-EXPOSE 3000
-CMD ["npm","start"]
+RUN npm install pm2 -g
+COPY . ./
+ENV PORT 4000
+EXPOSE $PORT
+CMD ["pm2-runtime", "start", "index.js", "--name", "node-ec2"]
